@@ -1,0 +1,8 @@
+.homeinput {
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: grey
+  }
+input:focus {
+  border-color: blue;
+}

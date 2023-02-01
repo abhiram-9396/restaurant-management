@@ -23,8 +23,8 @@ function Login() {
             password: password,
           })
           .then(function(response) {
-            // const loginresp = response;
             console.log(response);
+            navigate("/home");
             
           })
           .catch(function (error) {

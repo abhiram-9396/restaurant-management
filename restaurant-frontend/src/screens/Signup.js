@@ -3,14 +3,16 @@ import Card from 'react-bootstrap/Card';
 import axios from 'axios';
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
+import Alert from 'react-bootstrap/Alert';
 
 
 function Signup() {
-    const [email, setemail] = useState('')
-    const [password, setpassword] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [firstName, setfirstName] = useState('')
     const [lastName, setlastName] = useState('')
-    // const [error, setError] = useState('')
+    const [show, setShow] = useState(true);
+    const [error, setError] = useState('')
 
     const navigate = useNavigate();
 
@@ -28,16 +30,39 @@ function Signup() {
           })
           .then(function (response) {
             console.log(response);
+            navigate("/auth/login");
           })
           .catch(function (error) {
             console.log(error);
+            if(error.response.data.message)
+            {
+                setError(error.response.data.message);
+            }
           });
 
-        navigate("/auth/login");
+        // navigate("/auth/login");
     }
+
+    function cancelCourse(){
+        setEmail('')
+        setPassword('')
+        setfirstName('')
+        setlastName('')
+        setShow(false)
+      }
    
   return (
     <div style={{padding: '20px'}}>
+        {error && (
+            <Alert show={show} key= "danger" variant="danger">
+                {error}
+                <div className="d-flex justify-content-end">
+                <button onClick={cancelCourse} className="btn btn-danger">
+                    Close
+                </button>
+                </div>
+            </Alert>
+        )}
         <Card style={{ width: '40rem', padding: '20px' }} bg='secondary'>
         <form onSubmit={sendPostrequest}>
             <h3>Sign up</h3>
@@ -50,7 +75,7 @@ function Signup() {
                 className="form-control"
                 placeholder="Email"
                 required
-                onChange={(e) => setemail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
             />
             </div>
 
@@ -62,7 +87,7 @@ function Signup() {
                 className="form-control"
                 placeholder="Password"
                 required
-                onChange={(e) => setpassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
             />
             </div>
 
