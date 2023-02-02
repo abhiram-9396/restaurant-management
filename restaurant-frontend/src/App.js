@@ -8,17 +8,21 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
+import { useSelector } from "react-redux";
+
+
 
 function App() {
+  const isLoggedin = useSelector((state) => state.user.isLoggedin);
   return (
     <div>
     <Router>
       <Header/>
         <Routes>
-          <Route exact path='/home' element={<Home/>}></Route>
+          {isLoggedin && (<Route exact path='/home' element={<Home/>}></Route>)}
           <Route exact path='auth/login' element={<Login/>}></Route>
           <Route exact path='auth/signup' element={<Signup/>}></Route>
-          <Route exact path='Addmenu' element={<Addmenu/>}></Route>
+          {isLoggedin && (<Route exact path='Addmenu' element={<Addmenu/>}></Route>)}
         </Routes>
       </Router>
     </div>

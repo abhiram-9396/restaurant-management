@@ -4,6 +4,7 @@ import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { MenuDto } from './Menudto';
 // import { User } from '@prisma/client';
 
 @Injectable()
@@ -65,5 +66,28 @@ export class AuthService {
 
         delete user.hash;
         return user
+    }
+
+    @Post()
+    async AddUserMenu(dto: MenuDto)
+    {
+        const myobj = JSON.parse(JSON.stringify(dto))
+        const myemail = myobj.userEmail
+        const mymenu = myobj.userMenu
+
+        //trying to console log every category in menu for testing purpouse.
+        // mymenu.map((element) => {
+        //     console.log(element);
+        // })
+
+        //find the user by id and update
+        const updateUser = await this.prisma.user.update({
+            where: {
+              email: myemail,
+            },
+            data: {
+                menu: mymenu,
+            },
+        })
     }
 }

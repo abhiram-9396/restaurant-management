@@ -4,6 +4,8 @@ import axios from 'axios';
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import Alert from 'react-bootstrap/Alert';
+import { useSelector, useDispatch } from 'react-redux'
+import { storeDetails, userLogin, userLogout, storeMenu } from '../ReduxToolkit/userSlice';
 
 
 function Login() {
@@ -13,6 +15,9 @@ function Login() {
     const [show, setShow] = useState(true);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const userEmail = useSelector((state) => state.user.email);
+
     function sendPostrequest(e)
     {
         e.preventDefault();
@@ -23,19 +28,19 @@ function Login() {
             password: password,
           })
           .then(function(response) {
-            console.log(response);
-            navigate("/home");
-            
+              dispatch(userLogin()) //setting the login status of user to true
+              console.log(response);
+              dispatch(storeDetails(response.data)) //storing the logged in user in store.
+            navigate("/home")
           })
           .catch(function (error) {
-            if(error.response.data.message)
+            if(error?.response?.data.message)
             {
                 setError(error.response.data.message);
             }
-            console.log(error.response.data.message);
+            console.log(error);
           });
 
-        // navigate("/home");
 
         
     }
